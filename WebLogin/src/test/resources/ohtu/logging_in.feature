@@ -9,3 +9,13 @@ Scenario: user can not login with incorrect password
 Given login is selected
 When correct username "jukka" and incorrect password "wrong" are given
 Then user is not logged in and error message is given
+
+Scenario: nonexistent user can not login to 
+Given login is selected
+When incorrect username "wrong" and correct password "akkuj" are given
+Then user is not logged in and error message is given
+
+Scenario: user can register
+Given register new user is selected
+When username "akkuj", password "jukka" and password confirmation "jukka" are given
+Then user has been registered

@@ -9,15 +9,23 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 public class Stepdefs {
-    WebDriver driver = new ChromeDriver();
+    WebDriver driver = new HtmlUnitDriver();
     String baseUrl = "http://localhost:4567";
     
     @Given("^login is selected$")
     public void login_selected() throws Throwable {
         driver.get(baseUrl);
         WebElement element = driver.findElement(By.linkText("login"));       
+        element.click();          
+    }
+
+    @Given("^register new user is selected$")
+    public void register_new_user_selected() throws Throwable {
+        driver.get(baseUrl);
+        WebElement element = driver.findElement(By.linkText("register new user"));       
         element.click();          
     } 
 
@@ -28,6 +36,18 @@ public class Stepdefs {
         element = driver.findElement(By.name("password"));
         element.sendKeys(password);
         element = driver.findElement(By.name("login"));
+        element.submit();  
+    }
+
+    @When("^username \"([^\"]*)\", password \"([^\"]*)\" and password confirmation \"([^\"]*)\" are given$")
+    public void username_and_password_are_given(String username, String password, String confirmation) throws Throwable {
+        WebElement element = driver.findElement(By.name("username"));
+        element.sendKeys(username);
+        element = driver.findElement(By.name("password"));
+        element.sendKeys(password);
+        element = driver.findElement(By.name("passwordConfirmation"));
+        element.sendKeys(confirmation);
+        element = driver.findElement(By.name("signup"));
         element.submit();  
     }
 
@@ -45,10 +65,20 @@ public class Stepdefs {
     public void username_and_incorrect_password_are_given(String username, String password) throws Throwable {
         logInWith(username, password);
     }
+
+    @When("^incorrect username \"([^\"]*)\" and correct password \"([^\"]*)\" are given$")
+    public void incorrect_username_and_correct_password_are_given(String username, String password) throws Throwable {
+        logInWith(username, password);
+    }
     
     @Then("^user is logged in$")
     public void user_is_logged_in() throws Throwable {
         pageHasContent("Ohtu Application main page");
+    }
+
+    @Then("^user has been registered$")
+    public void user_has_been_registered() throws Throwable {
+        pageHasContent("Welcome to Ohtu Application!");
     }
     
     @Then("^user is not logged in and error message is given$")
