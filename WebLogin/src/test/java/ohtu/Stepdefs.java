@@ -22,7 +22,7 @@ public class Stepdefs {
         element.click();          
     }
 
-    @Given("^register new user is selected$")
+    @Given("^new user is selected$")
     public void register_new_user_selected() throws Throwable {
         driver.get(baseUrl);
         WebElement element = driver.findElement(By.linkText("register new user"));       
@@ -85,7 +85,13 @@ public class Stepdefs {
     public void user_is_not_logged_in_and_error_message_is_given() throws Throwable {
         pageHasContent("invalid username or password");
         pageHasContent("Give your credentials to login");
-    }     
+    }
+
+    @Then("^user is not created and error \"([^\"]*)\" is reported$")
+    public void user_is_not_created_and_error_is_reported(String error) throws Throwable {
+        pageHasContent(error);
+        pageHasContent("Create username and give password");
+    }
     
     @After
     public void tearDown(){
